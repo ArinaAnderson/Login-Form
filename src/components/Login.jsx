@@ -11,7 +11,8 @@ export default function Login() {
     setIsLoading(true);
     login(formData)
       .then((res) => {
-        setFormData((prevVal) => ({...prevVal, username: '', password: '' }))
+        setFormData((prevVal) => ({...prevVal, username: '', password: '' }));
+        setError(null);
         console.log(res);
       })
       .catch((e) => {
@@ -31,6 +32,7 @@ export default function Login() {
     <div className="App">
       <div className="login-container">
         <form className="form" onSubmit={handleFormSubmit}>
+          {error ? <p className="error">Please eneter right format data</p> : ''}
           <p>It is time to Login...</p>
           <div>
             <input
