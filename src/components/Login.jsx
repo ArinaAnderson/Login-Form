@@ -1,7 +1,33 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useReducer } from 'react';
 import login from '../utilities/login.js';
 
+// state arg is the latest state snapshot of the state that gets managed by useReducer
+const loginReducer = (state, action) => {
+  switch (action.type) {
+    case 'LOGIN':
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+        // isLoggedIn: false,
+      };
+      case 'LOGGED-IN': // error, logged-out
+        return
+    default:
+      return state;
+  }
+};
+
+const initState = {
+  formData: { username: '', password: '' },
+  isLoading: false,
+  isLoggedIn: false,
+  error: null,
+}; 
+
 export default function Login() {
+  const [state, dispatch] = useReducer(loginReducer, initState);
+
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,6 +38,8 @@ export default function Login() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    dispatch({type: 'LOGIN'});
+
     setIsLoading(true);
     login(formData)
       .then((res) => {
