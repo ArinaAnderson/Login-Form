@@ -9,10 +9,30 @@ const loginReducer = (state, action) => {
         ...state,
         isLoading: true,
         error: null,
-        // isLoggedIn: false,
       };
-      case 'LOGGED-IN': // error, logged-out
-        return
+      case 'SUCCESS':
+        return {
+          ...state,
+          formData: { username: '', email: '' },
+          isLoading: false,
+          isLoggedIn: true,
+        };
+      case 'ERROR':
+        return {
+          ...state,
+          error: action.payload,
+          isLoading: false,
+        };
+      case 'LOGGED-OUT':
+        return {
+          ...state,
+          isLoggedIn: false,
+        }
+      case 'FILL-FORM':
+        return {
+          ...state,
+          formData: {...state.formData, [action.payload.name]: action.payload.value}
+        };
     default:
       return state;
   }
@@ -28,41 +48,40 @@ const initState = {
 export default function Login() {
   const [state, dispatch] = useReducer(loginReducer, initState);
 
-  const [formData, setFormData] = useState({ username: '', password: '' });
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [error, setError] = useState(null);
+  const {
+    formData,
+    isLoading,
+    isLoggedIn,
+    error,
+  } = state;
 
   const submittedFormData = useRef();
-
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     dispatch({type: 'LOGIN'});
 
-    setIsLoading(true);
     login(formData)
       .then((res) => {
         submittedFormData.current = formData;
-        setFormData((prevVal) => ({...prevVal, username: '', password: '' }));
-        setError(null);
-        setIsLoggedIn(true);
         console.log(res); // Success! Meow!
+        dispatch({type: 'SUCCESS'})
       })
       .catch((e) => {
-        setError(e)
-        console.log(`Error: ${e}`);
+        dispatch({ type: 'ERROR', payload: `Error is ${e}`});
+        console.log(`Error: ${e}`); // Fail...Rrrrr
       })
-      .finally(() => setIsLoading(false));
+      // .finally(() => setIsLoading(false));
   };
 
   const handleInputChange = (e) => {
     const fieldName = e.target.name;
-    setFormData((prevVal) => ({...prevVal, [fieldName]: e.target.value}))
+    // setFormData((prevVal) => ({...prevVal, [fieldName]: e.target.value }));
+    dispatch({ type: 'FILL-FORM', payload: { name: fieldName, value: e.target.value }});
   };
 
   const handleLogOut = () => {
-    setIsLoggedIn(false);
+    dispatch({type: 'LOGGED-OUT'});
   };
 
   return (
