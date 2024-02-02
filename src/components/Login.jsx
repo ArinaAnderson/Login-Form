@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import useLocationHash from '../utilities/useLocationHash.js';
 import LoginUseState from './Login-useState.jsx';
 import LoginUseReducer from './Login-useReducer.jsx';
 
 export default function Login() {
-  const [hash, setHash] = useState(window.location.hash);
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      console.log(window.location.hash);
-      setHash(window.location.hash);
-    };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  const hash = useLocationHash();
 
   return (
     <>
