@@ -13,8 +13,8 @@ export default function Login() {
           <p><a href="#useReducer">useReducer</a></p>
         </div>
       )}
-      {hash === 'useState' ? <LoginUseState /> : null}
-      {hash === 'useReducer' ? <LoginUseReducer /> : null}
+      {hash === 'useState' && <LoginUseState />}
+      {hash === 'useReducer' && <LoginUseReducer />}
     </>
   );
 };
