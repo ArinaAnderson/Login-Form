@@ -45,7 +45,7 @@ const initState = {
   error: null,
 }; 
 
-export default function Login() {
+export default function LoginUseReducer() {
   const [state, dispatch] = useReducer(loginReducer, initState);
 
   const {

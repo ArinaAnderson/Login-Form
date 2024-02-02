@@ -1,9 +1,18 @@
-import React, { useState, useRef, useReducer } from 'react';
-import LoginUseState from './Login-useState.js';
-import LoginUseReducer from './Login-useReducer.js';
+import React, { useState, useEffect } from 'react';
+import LoginUseState from './Login-useState.jsx';
+import LoginUseReducer from './Login-useReducer.jsx';
 
 export default function Login() {
   const [hash, setHash] = useState(window.location.hash);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      console.log(window.location.hash);
+      setHash(window.location.hash);
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   return (
     <>
@@ -13,8 +22,8 @@ export default function Login() {
           <p><a href="#useReducer">useReducer</a></p>
         </div>
       )}
-      {hash === 'useState' && <LoginUseState />}
-      {hash === 'useReducer' && <LoginUseReducer />}
+      {hash === '#useState' && <LoginUseState />}
+      {hash === '#useReducer' && <LoginUseReducer />}
     </>
   );
 };
