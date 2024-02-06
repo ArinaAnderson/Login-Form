@@ -1,4 +1,5 @@
 import React, { useState, useRef, useReducer } from 'react';
+import { produce } from 'immer';
 import login from '../utilities/login.js';
 
 // state arg is the latest state snapshot of the state that gets managed by useReducer
@@ -29,10 +30,10 @@ const loginReducer = (state, action) => {
           isLoggedIn: false,
         }
       case 'FILL-FORM':
-        return {
-          ...state,
-          formData: {...state.formData, [action.payload.name]: action.payload.value}
-        };
+        return produce(state, (draft) => {
+          console.log('DRAFT', draft);
+          draft.formData[action.payload.name] = action.payload.value;
+        });
     default:
       return state;
   }
@@ -121,3 +122,10 @@ export default function LoginUseReducer() {
     </div>
   );
 };
+
+/*
+return {
+          ...state,
+          formData: {...state.formData, [action.payload.name]: action.payload.value}
+        };
+*/
